@@ -1,0 +1,58 @@
+name: 构建并部署到 AWS S3
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+    
+    steps:
+    # 检出代码
+    - name: 检出代码
+      uses: actions/checkout@v4
+      
+    # 设置 Node.js 环境
+    - name: 设置 Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: '18'
+        cache: 'npm'
+        
+    # 安装依赖
+    - name: 安装依赖
+      run: npm ci
+      
+    # 构建项目
+    - name: 构建项目
+      run: npm run build
+      
+    # 配置 AWS 凭证
+    - name: 配置 AWS 凭证
+      uses: aws-actions/configure-aws-credentials@v4
+      with:
+        aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+        aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+        aws-region: ${{ secrets.AWS_REGION }}
+        
+    # 同步到 S3 存储桶
+    - name: 同步到 S3
+      run: |
+        aws s3 sync dist/ s3://${{ secrets.S3_BUCKET_NAME }} --delete
+        
+    # 清除 CloudFront 缓存（可选）
+    - name: 清除 CloudFront 缓存
+      if: ${{ secrets.CLOUDFRONT_DISTRIBUTION_ID != '' }}
+      run: |
+        aws cloudfront create-invalidation \
+          --distribution-id ${{ secrets.CLOUDFRONT_DISTRIBUTION_ID }} \
+          --paths "/*"
+          
+    # 部署完成通知
+    - name: 部署完成
+      run: |
+        echo "🚀 部署完成！"
+        echo "网站地址: http://${{ secrets.S3_BUCKET_NAME }}.s3-website-${{ secrets.AWS_REGION }}.amazonaws.com" 

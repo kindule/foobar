@@ -65,6 +65,28 @@ npm run preview
 - **原生JavaScript** - 无框架依赖
 - **ES6+ 模块** - 现代JavaScript语法
 
+## 部署
+
+项目配置了自动化 CI/CD 流水线，支持自动部署到 AWS S3：
+
+### 自动部署特性
+
+- ✅ **GitHub Actions** - 每次推送自动触发
+- ☁️ **AWS S3** - 静态网站托管
+- 🚀 **自动构建** - Vite 生产环境构建
+- 🔄 **缓存清除** - 可选 CloudFront 缓存失效
+
+### 配置部署
+
+详细配置步骤请参考 [AWS_DEPLOYMENT_SETUP.md](./AWS_DEPLOYMENT_SETUP.md)
+
+### 部署流程
+
+1. 推送代码至 `main` 分支
+2. GitHub Actions 自动触发构建
+3. 构建完成后同步到 S3 存储桶
+4. 网站自动更新
+
 ## 开发说明
 
 这是一个入门级的前端项目，适合学习：
@@ -74,5 +96,6 @@ npm run preview
 - 响应式设计
 - JavaScript DOM操作
 - 现代前端开发工作流
+- CI/CD 自动化部署
 
 祝你编程愉快！ 🚀 
