@@ -1,0 +1,18 @@
+{
+  "name": "hello-world-project",
+  "version": "1.0.0",
+  "description": "一个使用Vite和Tailwind CSS的Hello World项目",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview"
+  },
+  "dependencies": {
+    "@tailwindcss/vite": "^4.1.8",
+    "tailwindcss": "^4.1.8"
+  },
+  "devDependencies": {
+    "vite": "^5.0.0"
+  }
+}
